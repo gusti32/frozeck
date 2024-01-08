@@ -9,8 +9,15 @@
     <body class="container-fluid">
         <h1>Infer</h1>
         <img src="{{ url_for('static', filename='img/test.png') }}" class="img-fluid d-block py-2" width="320" height="240">
-        <button type="button" class="btn btn-primary">Start</button>
-        <button type="button" class="btn btn-success">Capture</button>
-        <script src="{{ url_for('static', filename='css/bootstrap.min.js') }}" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <button type="button" class="btn btn-primary" id="start">Start</button>
+        <button type="button" class="btn btn-success" id="capture">Capture</button>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
+        <script>
+            const startBtn = new bootstrap.Button("#start");
+            const captureBtn = new bootstrap.Button("#capture");
+
+            console.log(startBtn);
+            console.log(captureBtn);
+        </script>
     </body>
 </html>
