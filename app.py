@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import request
 from os import environ
 
 CAMERA_URL = environ.get('CAMERA_URL')
@@ -10,9 +11,13 @@ app = Flask(__name__)
 def main_page():
     return render_template('page.html', camera_url=CAMERA_URL)
 
-@app.route("/infer")
+@app.post("/infer")
 def infer():
-    return 'Test'
+    data = request.get_data(False)
+    print(data)
+    return {
+        'test': "Test"
+    }
 
 if __name__ == '__main__':
     app.run()

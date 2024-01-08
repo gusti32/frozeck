@@ -43,8 +43,17 @@
                 }
             });
 
-            captureBtn.addEventListener('click', event => {
+            captureBtn.addEventListener('click', async event => {
+                const result = await fetch(`http://localhost:5000/infer`, {
+                    method: "POST",
+                    cache: "no-cache",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ test: "test" })
+                });
 
+                console.log(result.json());
             });
 
             console.log(url);
