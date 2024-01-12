@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap demo</title>
-        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
-        <style>
-            .image-container {
-                width: 320px;
-                height: 240px;
-            }
-        </style>
-    </head>
-    <body class="container-fluid">
-        <h1>Infer</h1>
-        <div class="image-container border my-2 text-center">
-            <span id="displayMsg">Press start to display camera</span>
-            <img src="" class="img-fluid" id="streamDisplay">
-        </div>
-        <button type="button" class="btn btn-primary" id="start">Start</button>
-        <button type="button" class="btn btn-success" id="capture">Capture</button>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
-        <script>
-            const url = "{{ camera_url }}";
-            let displayMsg = document.querySelector("#displayMsg");
-            let streamDisplay = document.querySelector('#streamDisplay');
-            let startBtn = document.querySelector('#start');
-            let captureBtn = document.querySelector("#capture");
-            let streamRunning = false;
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+    <style>
+      .image-container {
+          width: 320px;
+          height: 240px;
+      }
+    </style>
+  </head>
+  <body class="container-fluid">
+    <h1>Infer</h1>
+    <div class="image-container border my-2 text-center">
+      <span id="displayMsg">Press start to display camera</span>
+      <img src="" class="img-fluid" id="streamDisplay">
+    </div>
+    <button type="button" class="btn btn-primary" id="start">Start</button>
+    <button type="button" class="btn btn-success" id="capture">Capture</button>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
+    <script>
+      const url = "{{ camera_url }}";
+      let displayMsg = document.querySelector("#displayMsg");
+      let streamDisplay = document.querySelector('#streamDisplay');
+      let startBtn = document.querySelector('#start');
+      let captureBtn = document.querySelector("#capture");
+      let streamRunning = false;
 
-            startBtn.addEventListener('click', event => {
-                streamRunning = !streamRunning;
-                if (streamRunning) {
-                    displayMsg.classList.add('d-none');
-                    //captureBtn.classList.remove('d-none');
-                    startBtn.innerHTML = "Stop";
-                    streamDisplay.src = url + "/stream";
-                }
-                else {
-                    displayMsg.classList.remove('d-none');
-                    //captureBtn.classList.add('d-none');
-                    startBtn.innerHTML = "Start";
-                    streamDisplay.src = "";
-                }
-            });
+      startBtn.addEventListener('click', event => {
+        streamRunning = !streamRunning;
+        if (streamRunning) {
+          displayMsg.classList.add('d-none');
+          //captureBtn.classList.remove('d-none');
+          startBtn.innerHTML = "Stop";
+          streamDisplay.src = url + "/stream";
+        }
+        else {
+          displayMsg.classList.remove('d-none');
+          //captureBtn.classList.add('d-none');
+          startBtn.innerHTML = "Start";
+          streamDisplay.src = "";
+        }
+      });
 
-            captureBtn.addEventListener('click', async event => {
-                /* const capture = await fetch(url + '/capture', {
-                    method: "GET",
-                    cache: "no-cache",
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type": "image/jpeg",
-                    }
-                });
+      captureBtn.addEventListener('click', async event => {
+        /* const capture = await fetch(url + '/capture', {
+          method: "GET",
+          cache: "no-cache",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "image/jpeg",
+          }
+        });
 
-                console.log(capture); */
+        console.log(capture); */
 
-                const result = await fetch(`http://localhost:5000/infer`, {
-                    method: "POST",
-                    cache: "no-cache",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ test: "test" })
-                });
+        const result = await fetch(`http://localhost:5000/infer`, {
+          method: "POST",
+          cache: "no-cache",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ test: "test" })
+        });
 
-                console.log(await result.json());
-            });
+        console.log(await result.json());
+      });
 
-            console.log(url);
-        </script>
-    </body>
+      console.log(url);
+    </script>
+  </body>
 </html>
