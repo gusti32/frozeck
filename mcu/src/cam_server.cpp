@@ -127,8 +127,8 @@ esp_err_t capture_handler(httpd_req_t* req) {
   }
 
   httpd_resp_set_type(req, "image/jpeg");
-  httpd_resp_set_hdr(req, "Content-Disposition", "inline; filename=capture.jpg");
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_set_hdr(req, "Content-Disposition", "inline; filename=capture.jpg");
 
   //char buf[64];
   //snprintf(buf, 64, "%ld.%06ld", fb->timestamp.tv_sec, fb->timestamp.tv_usec);

@@ -1,11 +1,13 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask_cors import CORS
 from os import environ
 
 CAMERA_URL = environ.get('CAMERA_URL')
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def main_page():

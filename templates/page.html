@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Bootstrap demo</title>
-        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
         <style>
             .image-container {
                 width: 320px;
@@ -33,17 +33,30 @@
                 streamRunning = !streamRunning;
                 if (streamRunning) {
                     displayMsg.classList.add('d-none');
+                    //captureBtn.classList.remove('d-none');
                     startBtn.innerHTML = "Stop";
                     streamDisplay.src = url + "/stream";
                 }
                 else {
                     displayMsg.classList.remove('d-none');
+                    //captureBtn.classList.add('d-none');
                     startBtn.innerHTML = "Start";
                     streamDisplay.src = "";
                 }
             });
 
             captureBtn.addEventListener('click', async event => {
+                /* const capture = await fetch(url + '/capture', {
+                    method: "GET",
+                    cache: "no-cache",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-Type": "image/jpeg",
+                    }
+                });
+
+                console.log(capture); */
+
                 const result = await fetch(`http://localhost:5000/infer`, {
                     method: "POST",
                     cache: "no-cache",
@@ -53,7 +66,7 @@
                     body: JSON.stringify({ test: "test" })
                 });
 
-                console.log(result.json());
+                console.log(await result.json());
             });
 
             console.log(url);
