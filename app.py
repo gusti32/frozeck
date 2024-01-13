@@ -3,6 +3,8 @@ from flask import render_template
 from flask import request
 from flask_cors import CORS
 from os import environ
+from flask import Flask, render_template, send_from_directory
+
 
 CAMERA_URL = environ.get('CAMERA_URL')
 
@@ -20,6 +22,14 @@ def infer():
     return {
         'test': "Test"
     }
+
+@app.route('/model.json')
+def model():
+    return send_from_directory('', 'model.json')
+
+@app.route('/group1-shard1of1.bin')
+def weights():
+    return send_from_directory('', 'group1-shard1of1.bin')
 
 if __name__ == '__main__':
     app.run()

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deteksi Daun Tomat</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <style>
       .image-container {
         width: 320px;
@@ -16,7 +16,7 @@
     <h1>Infer</h1>
     <div class="image-container border my-2 text-center">
       <span id="displayMsg">Press start to display camera</span>
-      <img src="" class="img-fluid" id="streamDisplay">
+      <img src="" class="img-fluid" id="streamDisplay" />
     </div>
     <button type="button" class="btn btn-primary" id="start">Start</button>
     <button type="button" class="btn btn-success" id="capture">Capture</button>
