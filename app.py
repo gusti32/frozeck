@@ -12,7 +12,7 @@ CAMERA_URL = environ.get('CAMERA_URL')
 IMG_WIDTH = 320
 IMG_HEIGHT = 240
 
-model = keras.models.load_model("ModelCheckpoint.epoch27-loss0.03-acc0.98.hdf5")
+#model = keras.models.load_model("ModelCheckpoint.epoch27-loss0.03-acc0.98.hdf5")
 app = Flask(__name__)
 CORS(app)
 
@@ -23,7 +23,8 @@ def main_page():
 @app.post("/infer")
 def infer():
     data = request.get_data(False)
-    img = np.frombuffer(data, dtype=np.uint8).astype(float).reshape((IMG_HEIGHT, IMG_WIDTH, 4))
+    data = map(lambda x: x[1], filter(lambda x: x[0] % 4 != 3, enumerate(data))) # Remove alpha channel from the image
+    img = np.fromiter(data, dtype=np.uint8).reshape((IMG_HEIGHT, IMG_WIDTH, 3))
     print(img)
     return {
         'msg': "Done"
