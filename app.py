@@ -1,13 +1,18 @@
+import tensorflow as tf
+import numpy as np
+import keras
+import requests
 from flask import Flask
-from flask import render_template
+from flask import render_template, send_from_directory
 from flask import request
 from flask_cors import CORS
 from os import environ
-from flask import Flask, render_template, send_from_directory
-
 
 CAMERA_URL = environ.get('CAMERA_URL')
+IMG_WIDTH = 320
+IMG_HEIGHT = 240
 
+model = keras.models.load_model("ModelCheckpoint.epoch27-loss0.03-acc0.98.hdf5")
 app = Flask(__name__)
 CORS(app)
 
@@ -18,9 +23,10 @@ def main_page():
 @app.post("/infer")
 def infer():
     data = request.get_data(False)
-    print(data)
+    img = np.frombuffer(data, dtype=np.uint8).astype(float).reshape((IMG_HEIGHT, IMG_WIDTH, 4))
+    print(img)
     return {
-        'test': "Test"
+        'msg': "Done"
     }
 
 @app.route('/model.json')

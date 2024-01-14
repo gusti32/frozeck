@@ -16,7 +16,7 @@
     <h1>Infer</h1>
     <div class="image-container border my-2 text-center">
       <span id="displayMsg">Press start to display camera</span>
-      <img src="" class="img-fluid" id="streamDisplay" />
+      <img src="" class="img-fluid" id="streamDisplay" crossorigin="anonymous" />
     </div>
     <button type="button" class="btn btn-primary" id="start">Start</button>
     <button type="button" class="btn btn-success" id="capture">Capture</button>
@@ -27,7 +27,14 @@
       let streamDisplay = document.querySelector('#streamDisplay');
       let startBtn = document.querySelector('#start');
       let captureBtn = document.querySelector("#capture");
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d", { willReadFrequently: true });
       let streamRunning = false;
+
+      canvas.width = 320;
+      canvas.height = 240;
+
+      console.log(canvas);
 
       startBtn.addEventListener('click', event => {
         streamRunning = !streamRunning;
@@ -46,26 +53,22 @@
       });
 
       captureBtn.addEventListener('click', async event => {
-        /* const capture = await fetch(url + '/capture', {
-          method: "GET",
-          cache: "no-cache",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "image/jpeg",
-          }
-        });
+        ctx.drawImage(streamDisplay, 0, 0);
+        let imgData = ctx.getImageData(0, 0, 320, 240);
+        console.log(imgData);
 
-        console.log(capture); */
+        captureBtn.setAttribute("disabled", "");
 
         const result = await fetch(`http://localhost:5000/infer`, {
           method: "POST",
           cache: "no-cache",
           headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/*",
           },
-          body: JSON.stringify({ test: "test" })
+          body: imgData.data
         });
 
+        captureBtn.removeAttribute("disabled");
         console.log(await result.json());
       });
 

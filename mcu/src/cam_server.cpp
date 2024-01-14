@@ -2,6 +2,7 @@
 #include <esp_http_server.h>
 #include <memory>
 #include <cstring>
+#include <atomic>
 #include "cam_server.h"
 
 #define PWDN_GPIO_NUM    -1
@@ -91,6 +92,20 @@ void init_camera()
     return;
   }
 
+  httpd_uri_t test_uri = {
+    .uri      = "/test",
+    .method   = HTTP_GET,
+    .handler  = [](httpd_req_t* req) -> esp_err_t {
+      httpd_resp_set_type(req, "text/plain");
+      httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+      httpd_resp_set_hdr(req, "Access-Control-Allow-Methods", "*");
+      httpd_resp_set_hdr(req, "Access-Control-Allow-Headers", "*");
+      httpd_resp_sendstr(req, "Hello");
+      return ESP_OK;
+    },
+    .user_ctx = NULL,
+  };
+
   httpd_uri_t capture_uri = {
     .uri      = "/capture",
     .method   = HTTP_GET,
@@ -105,6 +120,7 @@ void init_camera()
     .user_ctx = NULL,
   };
 
+  httpd_register_uri_handler(server, &test_uri);
   httpd_register_uri_handler(server, &capture_uri);
   httpd_register_uri_handler(server, &stream_uri);
   Serial.println("Camera server started!");
@@ -128,6 +144,8 @@ esp_err_t capture_handler(httpd_req_t* req) {
 
   httpd_resp_set_type(req, "image/jpeg");
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Methods", "*");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Headers", "*");
   httpd_resp_set_hdr(req, "Content-Disposition", "inline; filename=capture.jpg");
 
   //char buf[64];
@@ -160,6 +178,11 @@ esp_err_t stream_handler(httpd_req_t* req) {
   camera_fb_t* fb = nullptr;
   httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
   char buf[128];
+
+  // Allow cross origin
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Methods", "*");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Headers", "*");
 
   while (true) {
     fb = esp_camera_fb_get();
