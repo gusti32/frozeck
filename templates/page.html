@@ -19,7 +19,8 @@
       <img src="" class="img-fluid" id="streamDisplay" crossorigin="anonymous" />
     </div>
     <button type="button" class="btn btn-primary" id="start">Start</button>
-    <button type="button" class="btn btn-success" id="capture">Capture</button>
+    <button type="button" class="btn btn-success d-none" id="capture">Capture</button>
+    <h5 id="result" class="d-none""></h5>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
     <script>
       const url = "{{ camera_url }}";
@@ -27,6 +28,7 @@
       let streamDisplay = document.querySelector('#streamDisplay');
       let startBtn = document.querySelector('#start');
       let captureBtn = document.querySelector("#capture");
+      let result = document.querySelector("#result");
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d", { willReadFrequently: true });
       let streamRunning = false;
@@ -40,13 +42,13 @@
         streamRunning = !streamRunning;
         if (streamRunning) {
           displayMsg.classList.add('d-none');
-          //captureBtn.classList.remove('d-none');
+          captureBtn.classList.remove('d-none');
           startBtn.innerHTML = "Stop";
           streamDisplay.src = url + "/stream";
         }
         else {
           displayMsg.classList.remove('d-none');
-          //captureBtn.classList.add('d-none');
+          captureBtn.classList.add('d-none');
           startBtn.innerHTML = "Start";
           streamDisplay.src = "";
         }
@@ -59,7 +61,7 @@
 
         captureBtn.setAttribute("disabled", "");
 
-        const result = await fetch(`http://localhost:5000/infer`, {
+        const query = await fetch(`http://localhost:5000/infer`, {
           method: "POST",
           cache: "no-cache",
           headers: {
@@ -68,8 +70,13 @@
           body: imgData.data
         });
 
+        const response = await query.json();
+
         captureBtn.removeAttribute("disabled");
-        console.log(await result.json());
+        console.log(response);
+
+        result.classList.remove("d-none");
+        result.innerHTML = `Hasil: ${response.result}`;
       });
 
       console.log(url);

@@ -28,8 +28,8 @@ void setup() {
   delay(3000);
 
   wifi_multi.addAP(wifi1_ssid, wifi1_password);
-  wifi_multi.addAP(wifi2_ssid, wifi2_password);
-  wifi_multi.addAP(wifi3_ssid, wifi3_password);
+  //wifi_multi.addAP(wifi2_ssid, wifi2_password);
+  //wifi_multi.addAP(wifi3_ssid, wifi3_password);
 
   Serial.print("Connecting to WiFi");
   while (wifi_multi.run() != WL_CONNECTED) {
@@ -45,8 +45,11 @@ void setup() {
   Serial.println(WiFi.SSID());
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
+  pinMode(2, OUTPUT);
+  digitalWrite(2, HIGH);
 }
 
 void loop() {
-  delay(3000);
+  delay(10000);
 }

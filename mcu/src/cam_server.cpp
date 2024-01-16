@@ -53,7 +53,7 @@ void init_camera()
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
-  config.frame_size = FRAMESIZE_QXGA;
+  config.frame_size = FRAMESIZE_SVGA;
   config.pixel_format = PIXFORMAT_JPEG;
   config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
   config.fb_location = CAMERA_FB_IN_PSRAM;
@@ -61,8 +61,9 @@ void init_camera()
   config.fb_count = 1;
 
   if(psramFound()){
-    config.frame_size = FRAMESIZE_QXGA;
-    config.jpeg_quality = 10;
+    Serial.println("PSRAM found");
+    config.frame_size = FRAMESIZE_SVGA;
+    config.jpeg_quality = 1;
     config.fb_count = 2;
     config.grab_mode = CAMERA_GRAB_LATEST;
   } else {
@@ -79,6 +80,14 @@ void init_camera()
 
   sensor_t * cam = esp_camera_sensor_get();
   cam->set_framesize(cam, FRAMESIZE_QVGA);
+  // cam->set_exposure_ctrl(cam, 1);
+  //cam->set_brightness(cam, 2);
+  //cam->set_awb_gain(cam, 0);
+  //cam->set_exposure_ctrl(cam, 0);
+  //cam->set_aec_value(cam, 664);
+  //cam->set_aec2(cam, 1);
+  //cam->set_gain_ctrl(cam, 0);
+  //cam->set_agc_gain(cam, 10);
 
   Serial.println("Camera initialized...");
 
@@ -198,7 +207,7 @@ esp_err_t stream_handler(httpd_req_t* req) {
       return ESP_FAIL;
     }
 
-    size_t chunk_len = snprintf(buf, 128, _STREAM_PART, fb->len);
+    size_t chunk_len = snprintf(buf, 64, _STREAM_PART, fb->len);
     auto err = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
     if (err == ESP_OK)
       err = httpd_resp_send_chunk(req, buf, chunk_len);
